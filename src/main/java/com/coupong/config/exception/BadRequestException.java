@@ -1,4 +1,4 @@
-package com.coupong.exception;
+package com.coupong.config.exception;
 
 import com.coupong.config.response.BaseResponse;
 import org.springframework.http.HttpStatus;

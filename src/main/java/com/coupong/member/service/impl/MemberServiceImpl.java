@@ -3,7 +3,7 @@ package com.coupong.member.service.impl;
 import com.coupong.config.response.BaseResponse;
 import com.coupong.constant.BaseStatus;
 import com.coupong.entity.Member;
-import com.coupong.exception.BadRequestException;
+import com.coupong.config.exception.BadRequestException;
 import com.coupong.member.dto.TokenResponse;
 import com.coupong.member.repository.MemberRepository;
 import com.coupong.member.service.MemberService;

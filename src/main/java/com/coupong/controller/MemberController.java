@@ -16,12 +16,12 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping("sign-up")
+    @PostMapping("/sign-up")
     public void signUp(){
         memberService.signup();
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public TokenResponse login(){
         return memberService.login();
     }

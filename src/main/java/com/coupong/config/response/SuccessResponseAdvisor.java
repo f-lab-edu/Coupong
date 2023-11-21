@@ -1,6 +1,6 @@
 package com.coupong.config.response;
 
-import com.coupong.exception.ExceptionAdvisor;
+import com.coupong.config.exception.ExceptionAdvisor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
