@@ -20,6 +20,13 @@ public class TokenRepository {
         return em.createQuery(sql, Token.class).getResultList().get(0);
     }
 
+    public Token findByAtk(String atk){
+        String sql = "select t from Token t where t.accessToken = :atk";
+        return em.createQuery(sql,Token.class)
+                .setParameter("atk",atk)
+                .getSingleResult();
+    }
+
     public void save(Token token){
         em.persist(token);
     }
