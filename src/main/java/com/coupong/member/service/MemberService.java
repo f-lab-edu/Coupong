@@ -10,4 +10,6 @@ public interface MemberService {
     public void signup(MemberSignupDto memberSignupDto, HttpServletRequest request);
 
     public TokenResponse login(MemberLoginDto memberLoginDto, HttpServletRequest request);
+
+    public TokenResponse reissue(HttpServletRequest request);
 }

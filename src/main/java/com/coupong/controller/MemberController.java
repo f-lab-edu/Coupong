@@ -36,7 +36,7 @@ public class MemberController {
 
     @LoginCheck
     @GetMapping("/reissue")
-    public void reissue(){
-
+    public TokenResponse reissue(HttpServletRequest request){
+        return memberService.reissue(request);
     }
 }

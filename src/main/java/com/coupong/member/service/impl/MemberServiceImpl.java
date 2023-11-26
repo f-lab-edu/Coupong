@@ -16,6 +16,7 @@ import com.coupong.token.repository.TokenRepository;
 import com.coupong.util.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,9 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
     private final TokenRepository tokenRepository;
+
+    @Value("${request-header.token-name}")
+    private String tokenHeader;
 
     @Override
     @Transactional
@@ -59,6 +63,28 @@ public class MemberServiceImpl implements MemberService {
             throw new BadRequestException(new BaseResponse(BaseStatus.PASSWORD_MISMATCH));
         }
 
+        Token token = createAndSaveToken(member);
+
+        return TokenResponse.builder()
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
+                .build();
+    }
+
+    @Override
+    public TokenResponse reissue(HttpServletRequest request) {
+        Token loginToken = (Token)request.getAttribute(tokenHeader);
+        Member member = loginToken.getMember();
+
+        Token newToken = createAndSaveToken(member);
+
+        return TokenResponse.builder()
+                .accessToken(newToken.getAccessToken())
+                .refreshToken(newToken.getRefreshToken())
+                .build();
+    }
+
+    public Token createAndSaveToken(Member member) {
         Token token = Token.builder()
                 .member(member)
                 .accessToken(Util.generateRid())
@@ -69,9 +95,6 @@ public class MemberServiceImpl implements MemberService {
 
         tokenRepository.save(token);
 
-        return TokenResponse.builder()
-                .accessToken(token.getAccessToken())
-                .refreshToken(token.getRefreshToken())
-                .build();
+        return token;
     }
 }
