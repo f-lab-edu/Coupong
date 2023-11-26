@@ -9,6 +9,7 @@ public class BaseResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final Object data;
 
+
     // payload 데이터가 없는 경우
     public BaseResponse(BaseStatus status){
         this.resCd = status.getCode();
