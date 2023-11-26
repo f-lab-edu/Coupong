@@ -1,5 +1,6 @@
 package com.coupong.controller;
 
+import com.coupong.member.dto.MemberLoginDto;
 import com.coupong.member.dto.MemberSignupDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -29,14 +30,19 @@ class MemberControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private String testEmail = "test@email.com";
+    private String testPass = "test pass";
+    private String testNick = "test nick";
+    private String testPhone = "01012341234";
+
     @Test
     public void 회원가입() throws Exception{
         String content = objectMapper.writeValueAsString(
                 MemberSignupDto.builder()
-                        .email("test@email.com")
-                        .password("test pass")
-                        .nickname("test nick")
-                        .phoneNumber("test phone")
+                        .email(testEmail)
+                        .password(testPass)
+                        .nickname(testNick)
+                        .phoneNumber(testPhone)
                         .build()
         );
         mockMvc.perform(post("/member/sign-up")
@@ -48,8 +54,50 @@ class MemberControllerTest {
 
     @Test
     public void 로그인() throws Exception{
-        mockMvc.perform(post("/member/login"))
+        signup();
+
+        String content = objectMapper.writeValueAsString(
+                MemberLoginDto.builder()
+                        .email(testEmail)
+                        .password(testPass)
+                        .build()
+        );
+
+        mockMvc.perform(post("/member/login")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 로그인실패() throws Exception{
+        signup();
+        String content = objectMapper.writeValueAsString(
+                MemberLoginDto.builder()
+                        .email(testEmail)
+                        .password("wrong pass")
+                        .build()
+        );
+
+        mockMvc.perform(post("/member/login")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    public void signup() throws Exception{
+        String content = objectMapper.writeValueAsString(
+                MemberSignupDto.builder()
+                        .email(testEmail)
+                        .password(testPass)
+                        .nickname(testNick)
+                        .phoneNumber(testPhone)
+                        .build()
+        );
+        mockMvc.perform(post("/member/sign-up")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE));
     }
 }

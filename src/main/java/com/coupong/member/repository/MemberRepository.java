@@ -17,4 +17,11 @@ public class MemberRepository {
     public void save(Member member){
         em.persist(member);
     }
+
+    public Member findByEmail(String email){
+        String sql = "select m from Member m where m.email = :email";
+        return em.createQuery(sql, Member.class)
+                .setParameter("email", email)
+                .getSingleResult();
+    }
 }

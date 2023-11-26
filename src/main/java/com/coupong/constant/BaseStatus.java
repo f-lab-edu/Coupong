@@ -3,7 +3,10 @@ package com.coupong.constant;
 public enum BaseStatus {
     SUCCESS(200),
 
-    BAD_REQUEST(400);
+    BAD_REQUEST(400),
+
+    CANNOT_FIND_USER(410),
+    PASSWORD_MISMATCH(411);
 
 
     private final int code;
