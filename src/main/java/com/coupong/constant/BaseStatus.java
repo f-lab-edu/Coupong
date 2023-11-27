@@ -13,10 +13,10 @@ public enum BaseStatus {
     BEFORE_COUPON_START_TIME(471),
     AFTER_COUPON_END_TIME(472),
     COUPON_USED(473),
-    COUPON_HAS_RUN_OUT(474)
+    COUPON_HAS_RUN_OUT(474),
+    NOT_FOUND(475)
 
     // Order Server Exception 55x
-
 
     // Coupon Server Exception 57x
 

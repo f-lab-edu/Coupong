@@ -2,6 +2,7 @@ package com.coupong.entity;
 
 import com.coupong.constant.OrderStatus;
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,13 +21,16 @@ public class Order {
 
     private String rid;
 
-    private int memberId;
+    @ManyToOne
+    @JoinColumn(name = "memberId")
+    private Member member;
 
     private String address;
 
     @Enumerated(EnumType.ORDINAL)
     private OrderStatus status; // 주문, 취소
 
+    @CreationTimestamp
     private LocalDateTime orderDate;
 
     @OneToOne
@@ -39,16 +43,16 @@ public class Order {
 
     /**
      * Order 정적 팩토리 메서드
-     * @param memberId
+     * @param member
      * @param orderItems
      * @param issuedCoupon
      * @param address
      * @return
      */
-    public static Order createOrder(Integer memberId, List<OrderItem> orderItems, IssuedCoupon issuedCoupon, String address) {
+    public static Order createOrder(Member member, List<OrderItem> orderItems, IssuedCoupon issuedCoupon, String address) {
         Order order = new Order();
         order.setRid();
-        order.setMemberId(memberId);
+        order.setMember(member);
         order.setAddress(address);
         order.setStatus(OrderStatus.ORDER);
         order.setOrderDate(LocalDateTime.now());
@@ -69,8 +73,8 @@ public class Order {
     private void setRid() {
         this.rid = "ORD" + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE);
     }
-    private void setMemberId(Integer memberId) {
-        this.memberId = memberId;
+    private void setMember(Member member) {
+        this.member = member;
     }
 
     private void setAddress(String address) { this.address = address; }
