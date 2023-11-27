@@ -22,9 +22,6 @@ public class OrderItem {
     private Integer quantity;
 
     public static OrderItem createOrderItem(Item item, Integer quantity) {
-        // 상품이 주문할 수 있는 상품인지 확인
-        //item.canOrder(quantity);
-
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setQuantity(quantity);

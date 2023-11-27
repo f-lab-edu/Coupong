@@ -37,4 +37,23 @@ public class Item {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public boolean canOrder(Integer quantity) { // TODO : exception 날리기
+        if(this.status.compareTo(0) > 0) {
+            return false;   // 주문 가능 상태인지 확인
+        }
+        if(this.remains.compareTo(quantity) < 0) {
+            return false;   // 주문하려는 수량보다 적은지 확인
+        }
+        return true;
+    }
+
+    public void order(Integer quantity) {
+        // 상품을 주문할 수 있는지 확인
+        canOrder(quantity);
+
+        this.remains -= quantity;
+        this.status = 1;
+        this.updatedAt = LocalDateTime.now();
+    }
 }
