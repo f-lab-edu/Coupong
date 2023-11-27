@@ -52,6 +52,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public TokenResponse login(MemberLoginDto memberLoginDto, HttpServletRequest request) {
 
         Member member = memberRepository.findByEmail(memberLoginDto.getEmail());
@@ -72,6 +73,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public TokenResponse reissue(HttpServletRequest request) {
         Token loginToken = (Token)request.getAttribute(tokenHeader);
         Member member = loginToken.getMember();
@@ -96,5 +98,12 @@ public class MemberServiceImpl implements MemberService {
         tokenRepository.save(token);
 
         return token;
+    }
+
+    @Override
+    @Transactional
+    public void logout(HttpServletRequest request) {
+        Token loginToken = (Token)request.getAttribute(tokenHeader);
+        tokenRepository.delete(loginToken);
     }
 }

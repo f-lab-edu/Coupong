@@ -39,4 +39,10 @@ public class MemberController {
     public TokenResponse reissue(HttpServletRequest request){
         return memberService.reissue(request);
     }
+
+    @LoginCheck
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request){
+        memberService.logout(request);
+    }
 }

@@ -4,6 +4,7 @@ import com.coupong.config.response.BaseResponse;
 import com.coupong.constant.BaseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,6 +25,12 @@ public class ExceptionAdvisor {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseBody
     public ResponseEntity<BaseResponse> resolveException(DataIntegrityViolationException exception){
+        return new ResponseEntity<>(new BaseResponse(BaseStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> resolveException(EmptyResultDataAccessException exception){
         return new ResponseEntity<>(new BaseResponse(BaseStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 }

@@ -30,4 +30,8 @@ public class TokenRepository {
     public void save(Token token){
         em.persist(token);
     }
+
+    public void delete(Token token){
+        em.remove(token);
+    }
 }

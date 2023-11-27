@@ -56,6 +56,7 @@ public class LoginCheckAspect {
             throw new BadRequestException(new BaseResponse(BaseStatus.ACCESS_TOKEN_OUT_DATED));
         }
 
+
         request.setAttribute(tokenHeader,token);
 
         return joinPoint.proceed();

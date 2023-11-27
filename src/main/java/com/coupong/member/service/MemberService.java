@@ -12,4 +12,6 @@ public interface MemberService {
     public TokenResponse login(MemberLoginDto memberLoginDto, HttpServletRequest request);
 
     public TokenResponse reissue(HttpServletRequest request);
+
+    public void logout(HttpServletRequest request);
 }

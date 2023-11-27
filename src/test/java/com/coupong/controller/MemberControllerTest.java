@@ -114,6 +114,20 @@ class MemberControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void 로그아웃() throws Exception{
+        TokenResponse loginToken = getLoginToken();
+        mockMvc.perform(post("/member/logout")
+                        .header(atkHeader, loginToken.getAccessToken())
+                        .header(rtkHeader, loginToken.getRefreshToken()));
+
+        mockMvc.perform(post("/member/logout")
+                        .header(atkHeader, loginToken.getAccessToken())
+                        .header(rtkHeader, loginToken.getRefreshToken()))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
     public TokenResponse getLoginToken() throws Exception{
         signup();
         MvcResult loginResult = login();
