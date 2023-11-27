@@ -4,11 +4,13 @@ import com.coupong.constant.BaseStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class BaseResponse {
-    private final int resCd;
+    private int resCd;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private final Object data;
+    private Object data;
 
+    public BaseResponse() {
+    }
 
     // payload 데이터가 없는 경우
     public BaseResponse(BaseStatus status){
