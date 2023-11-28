@@ -2,19 +2,23 @@ package com.coupong.entity;
 
 import com.coupong.constant.OrderStatus;
 import lombok.Getter;
+import lombok.ToString;
+import org.aspectj.weaver.ast.Or;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
+@ToString
 @Table(name = "orders")
-public class Order {
+public class Order implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,7 +35,7 @@ public class Order {
     private OrderStatus status; // 주문, 취소
 
     @CreationTimestamp
-    private LocalDateTime orderDate;
+    private LocalDateTime order_at;
 
     @OneToOne
     @JoinColumn(name = "issuedCouponId")
@@ -40,6 +44,23 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL
             , orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o)
+            return true;
+
+        if(o instanceof Order) {
+            Order order = (Order)o;
+            return this.id.equals(order.getId());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     /**
      * Order 정적 팩토리 메서드
@@ -55,7 +76,7 @@ public class Order {
         order.setMember(member);
         order.setAddress(address);
         order.setStatus(OrderStatus.ORDER);
-        order.setOrderDate(LocalDateTime.now());
+        order.setOrderAt(LocalDateTime.now());
         order.setIssuedCoupon(issuedCoupon);
 
         for(OrderItem orderItem : orderItems) {
@@ -69,23 +90,26 @@ public class Order {
         orderItem.setOrder(this);
     }
 
-    // TODO rid 채번
     private void setRid() {
-        this.rid = "ORD" + LocalDateTime.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        this.rid = "ORD-" + UUID.randomUUID();
     }
     private void setMember(Member member) {
         this.member = member;
     }
 
-    private void setAddress(String address) { this.address = address; }
+    private void setAddress(String address) {
+        this.address = address;
+    }
 
     private void setStatus(OrderStatus status) {
         this.status = status;
     }
 
-    private void setOrderDate(LocalDateTime date) {
-        this.orderDate = date;
+    private void setOrderAt(LocalDateTime orderAt) {
+        this.order_at = orderAt;
     }
 
-    private void setIssuedCoupon(IssuedCoupon issuedCoupon) { this.issuedCoupon = issuedCoupon; }
+    private void setIssuedCoupon(IssuedCoupon issuedCoupon) {
+        this.issuedCoupon = issuedCoupon;
+    }
 }
