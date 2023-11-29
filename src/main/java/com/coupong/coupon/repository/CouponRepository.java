@@ -29,7 +29,7 @@ public class CouponRepository {
         return issuedCoupon;
     }
 
-    public Optional<Coupon> findById(int couponId) {
+    public Optional<Coupon> findById(Long couponId) {
         List<Coupon> coupons = em.createQuery(
                 "select c from coupon as c where c.id = :id", Coupon.class)
                 .setParameter("id", couponId)
