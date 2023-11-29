@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class CouponServiceImpl implements CouponService {
 
     private final CouponRepository couponRepository;
@@ -32,12 +31,8 @@ public class CouponServiceImpl implements CouponService {
     @Transactional(rollbackFor = Exception.class)
     public IssuedCoupon issueCoupon(Member member, CouponDto couponDto) {
 
-        log.info("**** service ****");
-
         Optional<Coupon> opCoupon = couponRepository.findById(couponDto.getId());
         Coupon coupon = opCoupon.orElseThrow(NotFoundException::new);
-
-        log.info("coupon: " + coupon.toString());
 
         // 발급할 수 있는 쿠폰인지 확인
         coupon.isValid();

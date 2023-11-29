@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/coupon")
-@Slf4j
 public class CouponController {
 
     private final CouponService couponService;
