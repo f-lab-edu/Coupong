@@ -10,6 +10,8 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -36,7 +38,8 @@ public class IssuedCoupon implements Serializable {
     @JoinColumn(name = "memberId")
     private Member member;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private IssuedCouponStatus status;
 
     private LocalDateTime usedAt;
@@ -73,19 +76,6 @@ public class IssuedCoupon implements Serializable {
         return issuedCoupon;
     }
 
-    public void canUse() throws RuntimeException {
-        coupon.isValid(); // 유효한 쿠폰인지 확인
-
-        if(status.equals(IssuedCouponStatus.USED)) {
-            throw new BadRequestException(new BaseResponse(COUPON_USED));   // 사용된 상태면 false
-        }
-    }
-
-    public void use() {
-        this.status = IssuedCouponStatus.USED;
-        this.usedAt = LocalDateTime.now();
-    }
-
     private void setCoupon(Coupon coupon) {
         this.coupon = coupon;
     }
@@ -100,5 +90,10 @@ public class IssuedCoupon implements Serializable {
 
     private void setIssuedAt(LocalDateTime issuedAt) {
         this.issuedAt = issuedAt;
+    }
+
+    public void use() {
+        this.status = IssuedCouponStatus.USED;
+        this.usedAt = LocalDateTime.now();
     }
 }

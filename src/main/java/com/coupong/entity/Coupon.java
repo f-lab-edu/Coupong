@@ -33,7 +33,8 @@ public class Coupon implements Serializable {
 
     private String name;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private CouponKind kind;
 
     @Max(100)
@@ -49,7 +50,8 @@ public class Coupon implements Serializable {
     @ColumnDefault("0")
     private Integer issuedCnt;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private CouponStatus status;
 
     private LocalDateTime applyAt;
@@ -131,27 +133,7 @@ public class Coupon implements Serializable {
         this.expireAt = expireAt;
     }
 
-    public void isValid() throws BadRequestException {
-        if(!status.equals(CouponStatus.AVAILABLE)) {
-            throw new BadRequestException(new BaseResponse(UNAVAILABLE_COUPON));
-        }
-        if(this.applyAt.isAfter(LocalDateTime.now())) {
-            // 적용 시작 시간이 지나지 않았으면 false
-            throw new BadRequestException(new BaseResponse(BEFORE_COUPON_START_TIME));
-        }
-        if(this.expireAt.isBefore(LocalDateTime.now())) {
-            // 만료 시간이 지났으면 false
-            throw new BadRequestException(new BaseResponse(AFTER_COUPON_END_TIME));
-        }
-    }
-
     public void issue() throws BadRequestException {
-        if(this.totalCnt.compareTo(this.issuedCnt) < 0) {
-            // 총 개수가 발급된 개수보다 같거나 작으면 false
-            throw new BadRequestException(new BaseResponse(COUPON_HAS_RUN_OUT));
-        }
         this.issuedCnt++;
     }
-
-
 }
