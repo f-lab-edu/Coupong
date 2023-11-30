@@ -1,8 +1,11 @@
 package com.coupong.controller;
 
 import com.coupong.order.dto.OrderItemDto;
+import com.coupong.order.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,13 +27,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class OrderControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
     private ObjectMapper objectMapper;
+
+    // 테스트 대상 - 사용하는 객체들의 의존성이 주입된다.
+    @InjectMocks
+    private OrderController target;
+
+    // 테스트 대상에 주입시켜 줄 객체 (테스트 대상에서 사용할 객체)
+    @Mock
+    private OrderService orderService;
+
+    // HTTP 호출 생성
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     public void 비회원_주문() throws Exception{
+
         List<OrderItemDto> orderItems = new ArrayList<>();
 
         Map<String, Object> input = new HashMap<>();
@@ -38,7 +51,6 @@ public class OrderControllerTest {
         input.put("address", 1);
         input.put("orderItems", orderItems);
         input.put("issuedCouponId", 1);
-
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/order/guest")

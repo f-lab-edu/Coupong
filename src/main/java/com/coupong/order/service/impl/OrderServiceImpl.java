@@ -85,19 +85,24 @@ public class OrderServiceImpl implements OrderService {
 
         // 주문한 상품 설정
         for(OrderItemDto orderItemDto : orderDto.getOrderItems()) {
+            // TODO : 상품 옵션 추가로 확인해야 함
             Optional<Item> opItem = itemRepository.findByRid(orderItemDto.getItemRid());
             Item item = opItem.orElseThrow(NotFoundException::new);
             item.order(orderItemDto.getQuantity());
 
-            OrderItem orderItem = OrderItem.createOrderItem(item, orderItemDto.getQuantity());
+            // 상품 쿠폰 사용
+            // TODO : 쿠폰 사용 시 쿠폰 종류 넘기기(쿠폰서비스 수정 필요)
+            IssuedCoupon itemCoupon = couponService.useCoupon(orderItemDto.getIssuedCouponId());
+
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderItemDto.getQuantity(), itemCoupon);
             orderItems.add(orderItem);
         }
 
-        // 쿠폰 사용
-        IssuedCoupon issuedCoupon = couponService.useCoupon(orderDto.getIssuedCouponId());
+        // 장바구니 쿠폰 사용
+        IssuedCoupon basketCoupon = couponService.useCoupon(orderDto.getIssuedCouponId());
 
         // 주문 생성
-        Order order = Order.createOrder(member, orderItems, issuedCoupon, orderDto.getAddress());
+        Order order = Order.createOrder(member, orderDto.getAddress(), basketCoupon, orderItems);
 
         return new OrderResultDto(orderRepository.save(order));
     }

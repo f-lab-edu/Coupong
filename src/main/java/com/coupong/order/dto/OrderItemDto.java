@@ -9,6 +9,10 @@ public class OrderItemDto {
 
     private String itemRid;
 
+    private Long itemOptionId;
+
     private Integer quantity;
+
+    private Integer issuedCouponId;
 
 }

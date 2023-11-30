@@ -12,7 +12,7 @@ import java.util.Objects;
 @ToString
 public class OrderItem implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +29,12 @@ public class OrderItem implements Serializable {
     // private ItemOption itemOption;
 
     private Integer quantity;
+
+    private Integer couponAppAmt;
+
+    @ManyToOne  // TODO : @OneToOne 으로 수정한 후 IssuedCoupon 테이블도 수정해줘야 함
+    @JoinColumn(name = "issuedCouponId")
+    private IssuedCoupon issuedCoupon;
 
     @Override
     public boolean equals(Object o) {
@@ -47,10 +53,15 @@ public class OrderItem implements Serializable {
         return Objects.hash(order.getId(), item.getId());
     }
 
-    public static OrderItem createOrderItem(Item item, Integer quantity) {
+    public static OrderItem createOrderItem(Item item, Integer quantity, IssuedCoupon issuedCoupon) {
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setQuantity(quantity);
+        int discountAmt = (item.getPrice() * issuedCoupon.getCoupon().getDiscountPercent()) / 100;
+        if(discountAmt > issuedCoupon.getCoupon().getMaxPrice()) {
+            discountAmt = issuedCoupon.getCoupon().getMaxPrice();
+        }
+        orderItem.setCouponAppAmt(item.getPrice() - discountAmt);
         return orderItem;
     }
 
@@ -59,5 +70,6 @@ public class OrderItem implements Serializable {
     private void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+    private void setCouponAppAmt(Integer amt) { this.couponAppAmt = amt; }
 
 }
