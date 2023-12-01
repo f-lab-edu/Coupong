@@ -6,7 +6,9 @@ public enum BaseStatus {
     BAD_REQUEST(400),
 
     // Order Bad Request 45x
-
+    NO_ITEM_TO_ORDER(450),
+    UNORDERABLE_ITEM(451),
+    OUT_OF_STOCK(452),
 
     // Coupon Bad Request 47x
     UNAVAILABLE_COUPON(470),

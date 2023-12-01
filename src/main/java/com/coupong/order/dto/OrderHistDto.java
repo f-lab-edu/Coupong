@@ -6,6 +6,7 @@ import com.coupong.entity.OrderItem;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,9 +18,16 @@ public class OrderHistDto {
 
     private OrderStatus orderStatus;
 
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     public OrderHistDto(){}
+
+    public OrderHistDto(String orderRid, String address, OrderStatus orderStatus, List<OrderItem> orderItems) {
+        this.orderRid = orderRid;
+        this.address = address;
+        this.orderStatus = orderStatus;
+        this.orderItems = orderItems;
+    }
 
     public OrderHistDto(Order order) {
         this.orderRid = order.getRid();

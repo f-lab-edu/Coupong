@@ -24,16 +24,14 @@ public class OrderRepository {
 
     public List<Order> findByPhoneNumber(String phoneNumber) {
         return em.createQuery(
-                "select o from order o " +
-                        "where o.phoneNumber = :phoneNumber", Order.class)
+                "select o from Order as o join o.member as m where m.phoneNumber = :phoneNumber", Order.class)
                 .setParameter("phoneNumber", phoneNumber)
                 .getResultList();
     }
 
     public List<Order> findByOrderRid(String orderRid) {
         return em.createQuery(
-                        "select o from order o " +
-                                "where o.order_rid = :orderRid", Order.class)
+                        "select o from Order as o where o.rid = :orderRid", Order.class)
                 .setParameter("orderRid", orderRid)
                 .getResultList();
     }

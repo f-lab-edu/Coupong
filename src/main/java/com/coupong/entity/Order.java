@@ -21,7 +21,7 @@ import java.util.*;
 @Table(name = "orders")
 public class Order implements Serializable {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,15 +33,15 @@ public class Order implements Serializable {
     private Member member;
 
     @CreationTimestamp
-    private LocalDateTime order_at;
+    private LocalDateTime orderAt;
 
     @NotBlank
     private String address;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private OrderCsStatus csStatus;
 
     @NotNull
@@ -78,6 +78,28 @@ public class Order implements Serializable {
         return Objects.hash(id);
     }
 
+    public Order() {}
+
+    // JPA에서 필요한 메서드
+    public Order(Long id, String rid, Member member, LocalDateTime orderAt, String address
+            , OrderStatus status, OrderCsStatus csStatus
+            , Integer totalItemFee, Integer deliveryFee, Integer totalOrderFee, IssuedCoupon issuedCoupon
+            , List<OrderItem> orderItems
+    ) {
+        this.id = id;
+        this.rid = rid;
+        this.member = member;
+        this.orderAt = orderAt;
+        this.address = address;
+        this.status = status;
+        this.csStatus = csStatus;
+        this.totalItemFee = totalItemFee;
+        this.deliveryFee = deliveryFee;
+        this.totalOrderFee = totalOrderFee;
+        this.issuedCoupon = issuedCoupon;
+        this.orderItems = orderItems;
+    }
+
     /**
      * Order 정적 팩토리 메서드
      * @param member
@@ -89,33 +111,22 @@ public class Order implements Serializable {
     public static Order createOrder(Member member, String address
             , IssuedCoupon issuedCoupon
             , List<OrderItem> orderItems
+            , int totalItemFee, int deliveryFee
             ) {
         Order order = new Order();
-        order.setRid();
+        order.setRid("ORD-" + UUID.randomUUID());
         order.setMember(member);
         order.setOrderAt(LocalDateTime.now());
         order.setAddress(address);
         order.setStatus(OrderStatus.ORDER_RECEIVED);
-
         order.setIssuedCoupon(issuedCoupon);
-
-        // 총상품금액 = 주문상품의 쿠폰적용금액 합산 - 장바구니 쿠폰 할인
-        int totalItemFee = 0;
-        for(OrderItem orderItem : orderItems) {
-            totalItemFee += orderItem.getCouponAppAmt();
-            order.addOrderItem(orderItem);
-        }
-        int discountFee = (totalItemFee * issuedCoupon.getCoupon().getDiscountPercent()) / 100;
-        if(discountFee > issuedCoupon.getCoupon().getMaxPrice()) {
-            discountFee = issuedCoupon.getCoupon().getMaxPrice();
-        }
-        totalItemFee -= discountFee;
         order.setTotalItemFee(totalItemFee);
-
-        // 총주문금액 = 총상품금액 + 배송비
-        int deliveryFee = 3000;     // TODO: 어떻게 가져올지 정해야함
         order.setDeliveryFee(deliveryFee);
         order.setTotalOrderFee(totalItemFee + deliveryFee);
+
+        for(OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
 
         return order;
     }
@@ -125,15 +136,15 @@ public class Order implements Serializable {
         orderItem.setOrder(this);
     }
 
-    private void setRid() {
-        this.rid = "ORD-" + UUID.randomUUID();
+    private void setRid(String rid) {
+        this.rid = rid;
     }
     private void setMember(Member member) {
         this.member = member;
     }
 
     private void setOrderAt(LocalDateTime orderAt) {
-        this.order_at = orderAt;
+        this.orderAt = orderAt;
     }
 
     private void setAddress(String address) {
@@ -163,4 +174,9 @@ public class Order implements Serializable {
     private void setIssuedCoupon(IssuedCoupon issuedCoupon) {
         this.issuedCoupon = issuedCoupon;
     }
+
+    public void cancelOrder() {
+        this.csStatus = OrderCsStatus.CANCEL;
+    }
+
 }

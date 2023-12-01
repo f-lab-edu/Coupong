@@ -53,15 +53,21 @@ public class OrderItem implements Serializable {
         return Objects.hash(order.getId(), item.getId());
     }
 
-    public static OrderItem createOrderItem(Item item, Integer quantity, IssuedCoupon issuedCoupon) {
+    public OrderItem() {}
+
+    public OrderItem(Long id, Order order, Item item, Integer quantity) {
+        this.id = id;
+        this.order = order;
+        this.item = item;
+        this.quantity = quantity;
+    }
+
+    public static OrderItem createOrderItem(Item item, Integer quantity, IssuedCoupon issuedCoupon, Integer couponAppAmt) {
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setQuantity(quantity);
-        int discountAmt = (item.getPrice() * issuedCoupon.getCoupon().getDiscountPercent()) / 100;
-        if(discountAmt > issuedCoupon.getCoupon().getMaxPrice()) {
-            discountAmt = issuedCoupon.getCoupon().getMaxPrice();
-        }
-        orderItem.setCouponAppAmt(item.getPrice() - discountAmt);
+        orderItem.setCouponAppAmt(couponAppAmt);
+        orderItem.setIssuedCoupon(issuedCoupon);
         return orderItem;
     }
 
@@ -71,5 +77,8 @@ public class OrderItem implements Serializable {
         this.quantity = quantity;
     }
     private void setCouponAppAmt(Integer amt) { this.couponAppAmt = amt; }
+    private void setIssuedCoupon(IssuedCoupon issuedCoupon) {
+        this.issuedCoupon = issuedCoupon;
+    }
 
 }

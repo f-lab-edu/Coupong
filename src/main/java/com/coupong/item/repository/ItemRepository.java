@@ -1,5 +1,6 @@
 package com.coupong.item.repository;
 
+import com.coupong.config.exception.NotFoundException;
 import com.coupong.entity.Coupon;
 import com.coupong.entity.Item;
 import org.springframework.stereotype.Repository;
@@ -17,14 +18,14 @@ public class ItemRepository {
         this.em = em;
     }
 
-    public Optional<Item> findByRid(String itemRid) {
+    public Item findByRid(String itemRid) {
 
         List<Item> items = em.createQuery(
-                        "select i from item as i where i.rid = :rid", Item.class)
+                        "select i from Item as i where i.rid = :rid", Item.class)
                 .setParameter("rid", itemRid)
                 .getResultList();
 
-        return items.stream().findAny();
+        return items.stream().findAny().orElseThrow(NotFoundException::new);
     }
 
 

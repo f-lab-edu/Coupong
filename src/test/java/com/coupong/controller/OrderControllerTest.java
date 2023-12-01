@@ -45,12 +45,13 @@ public class OrderControllerTest {
     public void 비회원_주문() throws Exception{
 
         List<OrderItemDto> orderItems = new ArrayList<>();
+        orderItems.add(new OrderItemDto("상품RID", 1L, 1, 3));
 
         Map<String, Object> input = new HashMap<>();
         input.put("phoneNumber", "01011111111");
-        input.put("address", 1);
+        input.put("address", "주소");
         input.put("orderItems", orderItems);
-        input.put("issuedCouponId", 1);
+        input.put("issuedCouponId", 4);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/order/guest")
@@ -63,8 +64,14 @@ public class OrderControllerTest {
 
     @Test
     public void 비회원_주문조회() throws Exception{
+
+        Map<String, Object> input = new HashMap<>();
+        input.put("phoneNumber", "01011111111");
+
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/order/guest")
+                        .contentType(MediaType.APPLICATION_JSON)    // json으로 보낸다고 명시
+                        .content(objectMapper.writeValueAsString(input))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -72,21 +79,15 @@ public class OrderControllerTest {
 
     @Test
     public void 회원_주문() throws Exception{
-        mockMvc.perform(post("/order/member"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
 
-    @Test
-    public void 회원_주문조회() throws Exception{
         List<OrderItemDto> orderItems = new ArrayList<>();
+        orderItems.add(new OrderItemDto("상품RID", 1L, 1, 4));
 
         Map<String, Object> input = new HashMap<>();
         input.put("phoneNumber", "01011111111");
-        input.put("address", 1);
+        input.put("address", "주소");
         input.put("orderItems", orderItems);
-        input.put("issuedCouponId", 1);
-
+        input.put("issuedCouponId", 5);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/order/member")
@@ -95,6 +96,21 @@ public class OrderControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 회원_주문조회() throws Exception{
+
+        Map<String, Object> input = new HashMap<>();
+        input.put("orderRid", "ORD-");
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/order/member")
+                        .contentType(MediaType.APPLICATION_JSON)    // json으로 보낸다고 명시
+                        .content(objectMapper.writeValueAsString(input))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
 }
