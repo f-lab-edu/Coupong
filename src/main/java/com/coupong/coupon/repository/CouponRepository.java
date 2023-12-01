@@ -40,7 +40,7 @@ public class CouponRepository {
     }
     public IssuedCoupon findIssuedCouponById(Integer issuedCouponId) {
         List<IssuedCoupon> issuedCoupons = em.createQuery(
-                        "select i from issuedCoupon as i where i.id = :id", IssuedCoupon.class)
+                        "select i from issued_coupon as i where i.id = :id", IssuedCoupon.class)
                 .setParameter("id", issuedCouponId)
                 .getResultList();
 
