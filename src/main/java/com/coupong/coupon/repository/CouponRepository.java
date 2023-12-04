@@ -30,20 +30,20 @@ public class CouponRepository {
         return issuedCoupon;
     }
 
-    public Coupon findById(Long couponId) {
+    public Optional<Coupon> findById(Long couponId) {
         List<Coupon> coupons = em.createQuery(
                 "select c from coupon as c where c.id = :id", Coupon.class)
                 .setParameter("id", couponId)
                 .getResultList();
 
-        return coupons.stream().findAny().orElseThrow(NotFoundException::new);
+        return coupons.stream().findAny();
     }
-    public IssuedCoupon findIssuedCouponById(Integer issuedCouponId) {
+    public Optional<IssuedCoupon> findIssuedCouponById(Integer issuedCouponId) {
         List<IssuedCoupon> issuedCoupons = em.createQuery(
                         "select i from issued_coupon as i where i.id = :id", IssuedCoupon.class)
                 .setParameter("id", issuedCouponId)
                 .getResultList();
 
-        return issuedCoupons.stream().findAny().orElseThrow(NotFoundException::new);
+        return issuedCoupons.stream().findAny();
     }
 }

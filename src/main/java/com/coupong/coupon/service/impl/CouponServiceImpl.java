@@ -38,7 +38,7 @@ public class CouponServiceImpl implements CouponService {
     @Transactional(rollbackFor = Exception.class)
     public IssuedCoupon issueCoupon(Member member, CouponDto couponDto) {
 
-        Coupon coupon = couponRepository.findById(couponDto.getId());
+        Coupon coupon = couponRepository.findById(couponDto.getId()).orElseThrow(NotFoundException::new);
 
         // 발급할 수 있는 쿠폰인지 확인
         isValid(coupon);
@@ -57,7 +57,7 @@ public class CouponServiceImpl implements CouponService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public IssuedCoupon useCoupon(Integer issuedCouponId, CouponKind kind) {
 
-        IssuedCoupon issuedCoupon = couponRepository.findIssuedCouponById(issuedCouponId);
+        IssuedCoupon issuedCoupon = couponRepository.findIssuedCouponById(issuedCouponId).orElseThrow(NotFoundException::new);
 
         // 사용할 수 있는 쿠폰인지 확인하기
         canUse(issuedCoupon, kind);
