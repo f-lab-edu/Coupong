@@ -20,9 +20,6 @@ import java.util.Objects;
 import static com.coupong.constant.BaseStatus.*;
 
 @Entity(name = "issued_coupon")
-@Getter
-@ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)  // JPA를 위해 기본생성자 추가
 public class IssuedCoupon implements Serializable {
 
     private static final long serialVersionUID = 2L;
@@ -50,6 +47,8 @@ public class IssuedCoupon implements Serializable {
     @OneToOne(mappedBy = "issuedCoupon")
     private Order order;
 
+    protected IssuedCoupon() {} // JPA를 위해 기본생성자 추가
+
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
@@ -74,6 +73,34 @@ public class IssuedCoupon implements Serializable {
         issuedCoupon.setIssuedAt(LocalDateTime.now());
 
         return issuedCoupon;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Coupon getCoupon() {
+        return coupon;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public IssuedCouponStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getIssuedAt() {
+        return issuedAt;
+    }
+
+    public LocalDateTime getUsedAt() {
+        return usedAt;
     }
 
     private void setCoupon(Coupon coupon) {

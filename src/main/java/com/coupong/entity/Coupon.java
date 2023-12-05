@@ -21,9 +21,6 @@ import java.util.Objects;
 import static com.coupong.constant.BaseStatus.*;
 
 @Entity(name = "coupon")
-@Getter
-@ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)  // JPA를 위해 기본생성자 추가
 public class Coupon implements Serializable {
 
     private static final long serialVersionUID = 2L;
@@ -64,6 +61,8 @@ public class Coupon implements Serializable {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    protected Coupon() {}  // JPA를 위해 기본생성자 추가
+
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
@@ -95,6 +94,50 @@ public class Coupon implements Serializable {
         coupon.setApplyAt(applyAt);
         coupon.setExpireAt(expireAt);
         return coupon;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CouponKind getKind() {
+        return kind;
+    }
+
+    public Integer getDiscntRate() {
+        return discntRate;
+    }
+
+    public Integer getMaxDiscntPrice() {
+        return maxDiscntPrice;
+    }
+
+    public Integer getMinOrderAmt() {
+        return minOrderAmt;
+    }
+
+    public Integer getTotalCnt() {
+        return totalCnt;
+    }
+
+    public CouponStatus getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getApplyAt() {
+        return applyAt;
+    }
+
+    public LocalDateTime getExpireAt() {
+        return expireAt;
+    }
+
+    public Integer getIssuedCnt() {
+        return issuedCnt;
     }
 
     private void setName(String name) {
