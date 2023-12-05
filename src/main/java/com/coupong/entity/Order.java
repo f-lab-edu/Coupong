@@ -16,8 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
-@Getter
-@ToString
 @Table(name = "orders")
 public class Order implements Serializable {
 
@@ -134,6 +132,54 @@ public class Order implements Serializable {
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getRid() {
+        return rid;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public LocalDateTime getOrderAt() {
+        return orderAt;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public OrderCsStatus getCsStatus() {
+        return csStatus;
+    }
+
+    public Integer getTotalItemFee() {
+        return totalItemFee;
+    }
+
+    public Integer getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public Integer getTotalOrderFee() {
+        return totalOrderFee;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public IssuedCoupon getIssuedCoupon() {
+        return issuedCoupon;
     }
 
     private void setRid(String rid) {

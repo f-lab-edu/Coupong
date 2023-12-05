@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 public class OrderHistDto {
 
     private String orderRid;
@@ -37,5 +36,21 @@ public class OrderHistDto {
 
     public void addOrderItems(OrderItem orderItem) {
         this.orderItems.add(orderItem);
+    }
+
+    public String getOrderRid() {
+        return orderRid;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 }

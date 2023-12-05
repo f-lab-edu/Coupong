@@ -4,7 +4,6 @@ import lombok.Getter;
 
 import java.io.Serializable;
 
-@Getter
 public class OrderItemDto {
 
     private String itemRid;
@@ -24,4 +23,19 @@ public class OrderItemDto {
         this.issuedCouponId = issuedCouponId;
     }
 
+    public String getItemRid() {
+        return itemRid;
+    }
+
+    public Long getItemOptionId() {
+        return itemOptionId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Integer getIssuedCouponId() {
+        return issuedCouponId;
+    }
 }

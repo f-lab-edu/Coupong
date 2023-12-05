@@ -8,8 +8,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Getter
-@ToString
 public class OrderItem implements Serializable {
 
     private static final long serialVersionUID = 2L;
@@ -69,6 +67,30 @@ public class OrderItem implements Serializable {
         orderItem.setCouponAppAmt(couponAppAmt);
         orderItem.setIssuedCoupon(issuedCoupon);
         return orderItem;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Integer getCouponAppAmt() {
+        return couponAppAmt;
+    }
+
+    public IssuedCoupon getIssuedCoupon() {
+        return issuedCoupon;
     }
 
     public void setOrder(Order order) { this.order = order; }

@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Getter
 public class OrderResultDto {
 
     private String rid;
@@ -26,5 +25,17 @@ public class OrderResultDto {
         this.rid = order.getRid();
         this.status = order.getStatus().name();
         this.orderAt = order.getOrderAt();
+    }
+
+    public String getRid() {
+        return rid;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getOrderAt() {
+        return orderAt;
     }
 }
