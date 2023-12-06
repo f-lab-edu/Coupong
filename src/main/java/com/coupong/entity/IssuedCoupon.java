@@ -49,6 +49,18 @@ public class IssuedCoupon implements Serializable {
 
     protected IssuedCoupon() {} // JPA를 위해 기본생성자 추가
 
+    protected IssuedCoupon(Long id, Coupon coupon, Member member, IssuedCouponStatus status
+            , LocalDateTime usedAt, LocalDateTime issuedAt, Order order) {
+
+        this.id = id;
+        this.coupon = coupon;
+        this.member = member;
+        this.status = status;
+        this.usedAt = usedAt;
+        this.issuedAt = issuedAt;
+        this.order = order;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
@@ -65,6 +77,12 @@ public class IssuedCoupon implements Serializable {
         return Objects.hash(id);
     }
 
+    /**
+     * 정적 팩토리 메서드
+     * @param member
+     * @param coupon
+     * @return
+     */
     public static IssuedCoupon createIssuedCoupon(Member member, Coupon coupon) {
         IssuedCoupon issuedCoupon = new IssuedCoupon();
         issuedCoupon.setCoupon(coupon);
