@@ -55,7 +55,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public IssuedCoupon useCoupon(Integer issuedCouponId, CouponKind kind) {
+    public IssuedCoupon useCoupon(Long issuedCouponId, CouponKind kind) {
 
         IssuedCoupon issuedCoupon = couponRepository.findIssuedCouponById(issuedCouponId).orElseThrow(NotFoundException::new);
 
@@ -88,10 +88,10 @@ public class CouponServiceImpl implements CouponService {
 
         // 쿠폰 종류 확인
         if(!issuedCoupon.getCoupon().getKind().equals(kind)) {
-            if(kind.equals(CouponKind.ITEM)) {
+            if(kind.equals(CouponKind.BASKET)) {
                 // 주문에는 장바구니 쿠폰을 사용해야 한다.
                 throw new BadRequestException(new BaseResponse(HAVE_TO_BASKET_COUPON));   // 사용된 상태면 false
-            } else if(kind.equals(CouponKind.BASKET)) {
+            } else if(kind.equals(CouponKind.ITEM)) {
                 // 상품에는 상품 쿠폰을 사용해야 한다.
                 throw new BadRequestException(new BaseResponse(HAVE_TO_ITEM_COUPON));   // 사용된 상태면 false
             }

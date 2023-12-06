@@ -12,11 +12,11 @@ public class OrderItemDto {
 
     private Integer quantity;
 
-    private Integer issuedCouponId;
+    private Long issuedCouponId;
 
     public OrderItemDto() {}
 
-    public OrderItemDto(String itemRid, Long itemOptionId, Integer quantity, Integer issuedCouponId) {
+    public OrderItemDto(String itemRid, Long itemOptionId, Integer quantity, Long issuedCouponId) {
         this.itemRid = itemRid;
         this.itemOptionId = itemOptionId;
         this.quantity = quantity;
@@ -35,7 +35,7 @@ public class OrderItemDto {
         return quantity;
     }
 
-    public Integer getIssuedCouponId() {
+    public Long getIssuedCouponId() {
         return issuedCouponId;
     }
 }

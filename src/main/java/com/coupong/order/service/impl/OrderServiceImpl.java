@@ -3,6 +3,7 @@ package com.coupong.order.service.impl;
 import com.coupong.config.exception.BadRequestException;
 import com.coupong.config.exception.NotFoundException;
 import com.coupong.config.response.BaseResponse;
+import com.coupong.constant.CouponKind;
 import com.coupong.coupon.service.CouponService;
 import com.coupong.entity.*;
 import com.coupong.item.repository.ItemRepository;
@@ -101,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
 
             // 상품 쿠폰 사용
             // TODO : 쿠폰 사용 시 쿠폰 종류 넘기기(쿠폰서비스 수정 필요)
-            IssuedCoupon itemCoupon = couponService.useCoupon(orderItemDto.getIssuedCouponId());
+            IssuedCoupon itemCoupon = couponService.useCoupon(orderItemDto.getIssuedCouponId(), CouponKind.ITEM);
             //IssuedCoupon itemCoupon = couponService.useCoupon(orderItemDto.getIssuedCouponId(), CouponType.ITEM);
 
             int couponAppAmt = getCouponAppAmt(item, itemCoupon.getCoupon());
@@ -110,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // 장바구니 쿠폰 사용
-        IssuedCoupon basketCoupon = couponService.useCoupon(orderDto.getIssuedCouponId());
+        IssuedCoupon basketCoupon = couponService.useCoupon(orderDto.getIssuedCouponId(), CouponKind.BASKET);
         //IssuedCoupon basketCoupon = couponService.useCoupon(orderDto.getIssuedCouponId(), CouponType.BASKET);
 
         // 주문 생성
@@ -124,9 +125,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int getCouponAppAmt(Item item, Coupon coupon) {
         // 쿠폰적용금액
-        int discountAmt = (item.getPrice() * coupon.getDiscountPercent()) / 100;
-        if(discountAmt > coupon.getMaxPrice()) {
-            discountAmt = coupon.getMaxPrice();
+        int discountAmt = (item.getPrice() * coupon.getDiscntRate()) / 100;
+        if(discountAmt > coupon.getMaxDiscntPrice()) {
+            discountAmt = coupon.getMaxDiscntPrice();
         }
         return item.getPrice() - discountAmt;
     }
@@ -139,9 +140,9 @@ public class OrderServiceImpl implements OrderService {
             totalItemFee += orderItem.getCouponAppAmt() * orderItem.getQuantity();
         }
         // 장바구니 쿠폰 할인 금액
-        int discountFee = (totalItemFee * coupon.getDiscountPercent()) / 100;
-        if(discountFee > coupon.getMaxPrice()) {
-            discountFee = coupon.getMaxPrice();
+        int discountFee = (totalItemFee * coupon.getDiscntRate()) / 100;
+        if(discountFee > coupon.getMaxDiscntPrice()) {
+            discountFee = coupon.getMaxDiscntPrice();
         }
         return totalItemFee - discountFee;
     }
@@ -157,6 +158,7 @@ public class OrderServiceImpl implements OrderService {
             throw new BadRequestException(new BaseResponse(OUT_OF_STOCK));
         }
         // 상품 옵션 확인 필요
+
     }
 
 }

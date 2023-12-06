@@ -45,13 +45,13 @@ public class OrderControllerTest {
     public void 비회원_주문() throws Exception{
 
         List<OrderItemDto> orderItems = new ArrayList<>();
-        orderItems.add(new OrderItemDto("상품RID", 1L, 1, 3));
+        orderItems.add(new OrderItemDto("상품RID", 1L, 1, 3L));
 
         Map<String, Object> input = new HashMap<>();
         input.put("phoneNumber", "01011111111");
         input.put("address", "주소");
         input.put("orderItems", orderItems);
-        input.put("issuedCouponId", 4);
+        input.put("issuedCouponId", 14);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/order/guest")
@@ -81,13 +81,13 @@ public class OrderControllerTest {
     public void 회원_주문() throws Exception{
 
         List<OrderItemDto> orderItems = new ArrayList<>();
-        orderItems.add(new OrderItemDto("상품RID", 1L, 1, 4));
+        orderItems.add(new OrderItemDto("상품RID", 1L, 1, 4L));
 
         Map<String, Object> input = new HashMap<>();
         input.put("phoneNumber", "01011111111");
         input.put("address", "주소");
         input.put("orderItems", orderItems);
-        input.put("issuedCouponId", 5);
+        input.put("issuedCouponId", 14);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/order/member")

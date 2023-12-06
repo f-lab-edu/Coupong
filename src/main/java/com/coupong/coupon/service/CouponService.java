@@ -22,7 +22,7 @@ public interface CouponService {
      * @param issuedCouponId
      * @return
      */
-    IssuedCoupon useCoupon(Integer issuedCouponId, CouponKind kind);
+    IssuedCoupon useCoupon(Long issuedCouponId, CouponKind kind);
 
     /**
      * 유효한 쿠폰인지 확인

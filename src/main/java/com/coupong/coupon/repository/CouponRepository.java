@@ -38,7 +38,7 @@ public class CouponRepository {
 
         return coupons.stream().findAny();
     }
-    public Optional<IssuedCoupon> findIssuedCouponById(Integer issuedCouponId) {
+    public Optional<IssuedCoupon> findIssuedCouponById(Long issuedCouponId) {
         List<IssuedCoupon> issuedCoupons = em.createQuery(
                         "select i from issued_coupon as i where i.id = :id", IssuedCoupon.class)
                 .setParameter("id", issuedCouponId)
