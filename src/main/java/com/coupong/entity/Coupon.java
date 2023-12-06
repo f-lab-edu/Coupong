@@ -63,6 +63,25 @@ public class Coupon implements Serializable {
 
     protected Coupon() {}  // JPA를 위해 기본생성자 추가
 
+    protected Coupon(Long id, String name, CouponKind kind
+            , Integer discntRate, Integer maxDiscntPrice, Integer minOrderAmt, Integer totalCnt, Integer issuedCnt
+            , CouponStatus status, LocalDateTime applyAt, LocalDateTime expireAt, LocalDateTime createdAt, LocalDateTime updatedAt) {
+
+        this.id = id;
+        this.name = name;
+        this.kind = kind;
+        this.discntRate = discntRate;
+        this.maxDiscntPrice = maxDiscntPrice;
+        this.minOrderAmt = minOrderAmt;
+        this.totalCnt = totalCnt;
+        this.issuedCnt = issuedCnt;
+        this.status = status;
+        this.applyAt = applyAt;
+        this.expireAt = expireAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
@@ -79,6 +98,18 @@ public class Coupon implements Serializable {
         return Objects.hash(id);
     }
 
+    /**
+     * 정적 팩토리 메서드
+     * @param name
+     * @param kind
+     * @param discntRate
+     * @param maxDiscntPrice
+     * @param minOrderAmt
+     * @param totalCnt
+     * @param applyAt
+     * @param expireAt
+     * @return
+     */
     public static Coupon createCoupon(String name, CouponKind kind
             , Integer discntRate, Integer maxDiscntPrice, Integer minOrderAmt, Integer totalCnt
             , LocalDateTime applyAt, LocalDateTime expireAt) {
@@ -138,6 +169,18 @@ public class Coupon implements Serializable {
 
     public Integer getIssuedCnt() {
         return issuedCnt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    private void setId(Long id) {
+        this.id = id;
     }
 
     private void setName(String name) {
