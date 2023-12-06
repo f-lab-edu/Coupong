@@ -6,6 +6,7 @@ import com.coupong.entity.IssuedCoupon;
 import com.coupong.entity.Member;
 import com.coupong.entity.Role;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,10 +33,12 @@ public class CouponController {
      */
     @PostMapping("/issue")
     public void issueCoupon(@RequestBody CouponDto couponDto) {
+
         // 현재 로그인된 멤버 정보 가져오기
         Member member = new Member(1L, "user@gmail.com"
                 , "password", "nickname", "127.0.0.0", "01012341234"
-                , LocalDateTime.now(), LocalDateTime.now(), null, new Role(1L, "Member"));
+                , LocalDateTime.now(), LocalDateTime.now(), null, new Role(0L, "GUEST"));
+
         couponService.issueCoupon(member, couponDto);
     }
 
